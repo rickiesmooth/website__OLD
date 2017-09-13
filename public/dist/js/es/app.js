@@ -1,0 +1,1 @@
+'use strict';class App{constructor(){function a(a){a.preventDefault(),b.go(a.target.href)}const b=document.querySelector('sc-router'),c=document.querySelectorAll('a');c.forEach((b)=>{b.addEventListener('click',a)})}}(()=>new App)();

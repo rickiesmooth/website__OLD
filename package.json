@@ -4,8 +4,9 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "./bin/www",
-    "dev": "DEV_ENVIRONMENT=true nodemon server --exec babel-node",
-    "build": "babel ./server -d dist && node dist/build && babel ./client -d ./dist/client/js && babili ./dist/client/js -d ./dist/client/js"
+    "prestart": "npm run build",
+    "dev": "DEV_ENVIRONMENT=true nodemon --ignore public ./bin/www --exec babel-node",
+    "build": "babel ./src -d dist && node dist/build && babili ./public/js -d ./public/dist/js/es && babel ./public/js -d ./public/dist/js"
   },
   "babel": {
     "presets": [
@@ -28,7 +29,6 @@
     "@sendgrid/mail": "^6.1.3",
     "aphrodite": "^1.2.1",
     "body-parser": "^1.17.2",
-    "deep-diff": "^0.3.8",
     "express": "^4.15.4",
     "multer": "^1.3.0",
     "mz": "^2.4.0",

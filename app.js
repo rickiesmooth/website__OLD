@@ -14,15 +14,17 @@ sendgrid.setApiKey(process.env.SENDGRID_API_KEY)
 const app = express()
 const port = process.env.PORT || 5000
 const toplevelSection = /([^/]*)(\/|\/index.html)$/
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
+
+process.env.DEV_ENVIRONMENT && require('./src/build')
 
 app.get(toplevelSection, (req, res) => {
   req.item = req.params[0] || req.subdomains[0] || 'home'
   let file
   if ('partial' in req.query) {
-    file = path.resolve(__dirname, `./dist/client/partials/${req.item}.html`)
+    file = path.resolve(__dirname, `./public/dist/partials/${req.item}.html`)
   } else {
-    file = path.resolve(__dirname, `./dist/client/${req.item}.html`)
+    file = path.resolve(__dirname, `./public/dist/${req.item}.html`)
   }
 
   fs.readFile(file)
@@ -43,8 +45,7 @@ app.get(toplevelSection, (req, res) => {
 })
 
 app.use(bodyParser.json())
-
-app.use(express.static(path.resolve(__dirname, './dist/client')))
+app.use(express.static(path.resolve(__dirname, process.env.DEV_ENVIRONMENT ? './public' : './public/dist')))
 
 app.post('/contact', multer().array(), function (req, res) {
   console.log('✨request.body', req.body)
