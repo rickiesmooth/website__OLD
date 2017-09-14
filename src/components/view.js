@@ -2,59 +2,17 @@
 import { StyleSheet, css } from 'aphrodite/no-important'
 import h from 'vhtml'
 import { spacing } from '../styles/spacing'
-import { Title, Headline, Subline, Description, ContactForm, Job } from './'
 
-const Default = (props) => {
-  const { route, remote, children, data } = props
-  const target = (route === 'home') ? '^/$' : route
-  return <sc-view remote={remote} class={css(styles.View)} route={target}>
-    <Container target={target}>
-      <Title>
-        <Headline tag='h1'> { data.headline } </Headline>
-        { data.subline &&
-        <Subline tag='h2'>{ data.subline }</Subline> }
-      </Title>
-      { data.description &&
-      <Description>{data.description}</Description> }
-      { children }
-    </Container>
-  </sc-view>
-}
 export function View (props) {
   const { children, route, remote } = props
   const target = (route === 'home') ? '^/$' : `^/${route}/(.*)`
   return <sc-view remote={remote} class={css(styles.View)} route={target}>{children}</sc-view>
 }
-// export function View (props) {
-//   const { route, remote, data } = props
-//   const target = (route === 'home') ? '^/$' : `^/${route}/(.*)`
-//   if (data) {
-//     if (!data.template) {
-//       return <Default data={data} route={target} />
-//     } else if (data.template === 'contact') {
-//       return <Default data={data} route={target}><ContactForm /></ Default>
-//     } else if (data.template === 'experience') {
-//       return (
-//         <Default data={data} route={target}>{
-//           data.list.map((el, i) =>
-//             <Job data={el} />)
-//         }
-//         </Default>
-//       )
-//     }
-//   } else {
-//     return <sc-view remote={remote} class={css(styles.View)} route={target} />
-//   }
-// }
 
 export function Container (props) {
   const { children } = props
 
   return <div class={css(styles.Main)}><div class={css(styles.Container)}>{children}</div></div>
-}
-
-export function GeneratedStyles (props) {
-  return <script type='application/ld+json'> {'__GENERATED_STYLES'} </script>
 }
 
 export const styles = StyleSheet.create({

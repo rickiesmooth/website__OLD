@@ -20,6 +20,8 @@ process.env.DEV_ENVIRONMENT && require('./src/build')
 
 app.get(toplevelSection, (req, res) => {
   req.item = req.params[0] || req.subdomains[0] || 'home'
+  console.log('✨req.subdomains', req.subdomains)
+  console.log('✨req', req.referer)
   let file
   if ('partial' in req.query) {
     file = path.resolve(__dirname, `./public/dist/partials/${req.item}.html`)
@@ -48,13 +50,12 @@ app.use(bodyParser.json())
 app.use(express.static(path.resolve(__dirname, process.env.DEV_ENVIRONMENT ? './public' : './public/dist')))
 
 app.post('/contact', multer().array(), function (req, res) {
-  console.log('✨request.body', req.body)
   sendgrid.send({
-    to: 'test@example.com',
-    from: 'test@example.com',
-    subject: 'Sending with SendGrid is Fun',
-    text: 'and easy to do anywhere, even with Node.js',
-    html: '<strong>and easy to do anywhere, even with Node.js</strong>'
+    to: 'rick.p.smit@gmail.com',
+    from: req.body.email,
+    subject: `message from ${req.body.name}`,
+    text: req.body.text,
+    html: '<strong>message from website</strong>'
   })
   res.end('success')
 })

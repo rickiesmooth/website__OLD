@@ -4,12 +4,10 @@ import h from 'vhtml'
 import { spacing } from '../styles/spacing'
 
 export function Header (props) {
-  // const { children } = props
   return <header class={css(styles.Header)}><Nav /></header>
 }
 
 export function Nav (props) {
-  // const { children } = props
   return (
     <sc-nav class={css(styles.Menu)}>
       <Logo />

@@ -1,11 +1,11 @@
 'use strict'
 import Template from '../templates'
-import Pages from '../pages'
+import pages from '../pages'
 
 const write = require('./write')
 const init = require('./init')
 
-const t = new Template(Pages)
+const t = new Template(pages)
 
 init().then(() => {
   for (var page in t.pages) {

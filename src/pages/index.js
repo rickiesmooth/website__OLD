@@ -1,4 +1,4 @@
-const Pages = {
+const pages = {
   home: {
     headline: 'Application',
     subline: 'The power of Medium — accessible anywhere',
@@ -87,4 +87,4 @@ const Pages = {
   }
 }
 
-export default Pages
+export default pages
