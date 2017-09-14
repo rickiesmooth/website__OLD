@@ -6,7 +6,7 @@ import { Heading } from './text'
 import { spacing } from '../styles/spacing'
 // import { styles as fonts } from './text'
 
-export function Job (props) {
+function Job (props) {
   const jobInfo = props.data
   return (
     <div class={css(styles.Job)}>
@@ -23,6 +23,11 @@ export function Job (props) {
         {jobInfo.work.responsibilties.map((el, i) => (<li>{el}</li>))}
       </div>
     </div>)
+}
+
+export function Experience (props) {
+  return props.jobs.map((el, i) =>
+    <Job data={el} />)
 }
 
 export const styles = StyleSheet.create({

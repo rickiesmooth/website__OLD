@@ -1,7 +1,7 @@
 /** @jsx h */
 import {StyleSheetServer} from 'aphrodite/no-important'
 import h from 'vhtml'
-import { Header, View } from '../components'
+import { Header, Container, View, Title, Description, ContactForm, Experience } from '../components'
 
 const STYLES = '__STYLES'
 
@@ -25,17 +25,39 @@ const Templates = class Templates {
     this.parsed[this._template].partial = this.partial()
     this.parsed[this._template].full = this.full()
   }
-
   partial () {
+    // TODO: Fix this mess
     const target = this._template
-    return StyleSheetServer.renderStatic(() => {
-      return <View route={this._template} data={this.pages[target]} />
+    const data = this.pages[target]
+    const withoutContainer = StyleSheetServer.renderStatic(() => {
+      if (data) {
+        if (!data.template) {
+          return <div><Title data={data} /><Description text={data.description} /></div>
+        } else if (data.template === 'contact') {
+          return <div><Title data={data} /><ContactForm /></div>
+        } else if (data.template === 'experience') {
+          return <div><Title data={data} /><Description text={data.description} /><Experience jobs={data.list} /></div>
+        }
+      }
     })
+    const withContainer = StyleSheetServer.renderStatic(() => {
+      return <View route={target} >
+        <Container target={target}>
+          {withoutContainer.html}
+        </Container>
+      </View>
+    })
+
+    return {
+      html: withContainer.html,
+      css: withoutContainer.css,
+      forFull: withoutContainer.html
+    }
   }
 
   full () {
     const target = this._template
-    const page = this.pages[target]
+    const partial = this.parsed[this._template].partial
     const full = StyleSheetServer.renderStatic(() => {
       return <html>
         <head>
@@ -62,7 +84,11 @@ const Templates = class Templates {
               }
             })
           }
-          <View route={target} data={page} />
+          <View route={target} >
+            <Container target={target}>
+              { partial.forFull }
+            </Container>
+          </View>
           <sc-router />
           <script defer src='/js/sc-view.js' />
           <script defer src='/js/sc-router.js' />
@@ -70,9 +96,11 @@ const Templates = class Templates {
         </body>
       </html>
     })
-    full.html = full.html.replace(STYLES, full.css.content)
+    full.html = full.html.replace(STYLES, full.css.content + partial.css.content)
     return full
   }
 }
 
 export default Templates
+
+// <View route={target} data={page} />

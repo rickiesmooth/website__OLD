@@ -20,28 +20,32 @@ const Default = (props) => {
     </Container>
   </sc-view>
 }
-
 export function View (props) {
-  const { route, remote, data } = props
+  const { children, route, remote } = props
   const target = (route === 'home') ? '^/$' : `^/${route}/(.*)`
-  if (data) {
-    if (!data.template) {
-      return <Default data={data} route={target} />
-    } else if (data.template === 'contact') {
-      return <Default data={data} route={target}><ContactForm /></ Default>
-    } else if (data.template === 'experience') {
-      return (
-        <Default data={data} route={target}>{
-          data.list.map((el, i) =>
-            <Job data={el} />)
-        }
-        </Default>
-      )
-    }
-  } else {
-    return <sc-view remote={remote} class={css(styles.View)} route={target} />
-  }
+  return <sc-view remote={remote} class={css(styles.View)} route={target}>{children}</sc-view>
 }
+// export function View (props) {
+//   const { route, remote, data } = props
+//   const target = (route === 'home') ? '^/$' : `^/${route}/(.*)`
+//   if (data) {
+//     if (!data.template) {
+//       return <Default data={data} route={target} />
+//     } else if (data.template === 'contact') {
+//       return <Default data={data} route={target}><ContactForm /></ Default>
+//     } else if (data.template === 'experience') {
+//       return (
+//         <Default data={data} route={target}>{
+//           data.list.map((el, i) =>
+//             <Job data={el} />)
+//         }
+//         </Default>
+//       )
+//     }
+//   } else {
+//     return <sc-view remote={remote} class={css(styles.View)} route={target} />
+//   }
+// }
 
 export function Container (props) {
   const { children } = props

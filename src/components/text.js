@@ -20,13 +20,17 @@ export function Subline (props) {
 }
 
 export function Title (props) {
-  const { children } = props
-  return <div class={css(styles.Title)}>{children}</div>
+  const { data } = props
+  return <div class={css(styles.Title)}>
+    <Headline tag='h1'> { data.headline } </Headline>
+    { data.subline &&
+    <Subline tag='h2'>{ data.subline }</Subline> }
+  </div>
 }
 
 export function Description (props) {
-  const { children } = props
-  return <p class={css(styles.Description)}>{children}</p>
+  const { text } = props
+  return <p class={css(styles.Description)}>{text}</p>
 }
 
 export const styles = StyleSheet.create({
