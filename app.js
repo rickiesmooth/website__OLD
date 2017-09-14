@@ -19,7 +19,7 @@ const bodyParser = require('body-parser')
 process.env.DEV_ENVIRONMENT && require('./src/build')
 
 app.get(toplevelSection, (req, res) => {
-  req.item = req.params[0] || req.subdomains[0] || 'home'
+  req.item = req.params[0] || req.subdomains[0] !== 'www' && req.subdomains[0] || 'home'
   let file
   if ('partial' in req.query) {
     file = path.resolve(__dirname, `./public/dist/partials/${req.item}.html`)
