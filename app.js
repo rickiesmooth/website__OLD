@@ -20,8 +20,6 @@ process.env.DEV_ENVIRONMENT && require('./src/build')
 
 app.get(toplevelSection, (req, res) => {
   req.item = req.params[0] || req.subdomains[0] || 'home'
-  console.log('✨req.subdomains', req.subdomains)
-  console.log('✨req', req.referer)
   let file
   if ('partial' in req.query) {
     file = path.resolve(__dirname, `./public/dist/partials/${req.item}.html`)
@@ -54,8 +52,7 @@ app.post('/contact', multer().array(), function (req, res) {
     to: 'rick.p.smit@gmail.com',
     from: req.body.email,
     subject: `message from ${req.body.name}`,
-    text: req.body.text,
-    html: '<strong>message from website</strong>'
+    text: req.body.message
   })
   res.end('success')
 })
