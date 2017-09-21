@@ -19,6 +19,8 @@ export const styles = StyleSheet.create({
   View: {
     width: '100%',
     height: 'calc(100% - 69px)',
+    lineHeight: '1.58',
+    fontSize: '18px',
     right: 0,
     bottom: 0,
     position: 'fixed',
@@ -32,7 +34,7 @@ export const styles = StyleSheet.create({
   },
   Container: {
     margin: `0 auto`,
-    padding: `0 ${spacing.space2}`,
+    padding: spacing.space2,
     maxWidth: '1320px',
     height: 'auto',
     flexDirection: 'column',
@@ -41,11 +43,11 @@ export const styles = StyleSheet.create({
     display: 'flex',
     minHeight: '100%',
     '@media (min-width: 340px)': {
-      padding: `0 ${spacing.space4}`,
+      padding: spacing.space4,
       maxWidth: '1350px'
     },
     '@media (min-width: 768px)': {
-      padding: `0 ${spacing.space5}`,
+      padding: spacing.space5,
       maxWidth: '1410px'
     }
   },

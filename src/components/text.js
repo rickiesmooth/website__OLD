@@ -33,11 +33,16 @@ export function Description (props) {
   return <p class={css(styles.Description)}>{text}</p>
 }
 
+export function Paragraph (props) {
+  const { text } = props
+  return text.split('<br />').map((el) => <p class={css(styles.Paragraph)}>{el}</p>)
+}
+
 export const styles = StyleSheet.create({
   Title: {
     maxWidth: '630px',
     width: '100%',
-    margin: `${spacing.space2} 0`
+    marginBottom: spacing.space2
   },
   Headline: {
     marginBottom: spacing.space0
@@ -50,6 +55,11 @@ export const styles = StyleSheet.create({
   },
   Description: {
     maxWidth: '630px'
+  },
+  Paragraph: {
+    ':not(:first-child)': {
+      marginTop: spacing.space1
+    }
   },
   displayLarge: {
     fontSize: fontSize.displayLarge.initial,
@@ -86,7 +96,7 @@ export const styles = StyleSheet.create({
   },
   heading: {
     fontSize: fontSize.heading,
-    fontWeight: fontWeight.bold,
+    fontWeight: fontWeight.semibold,
     lineHeight: lineHeight.heading
   },
   subheading: {

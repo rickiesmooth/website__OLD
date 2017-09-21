@@ -47,6 +47,10 @@ app.get(toplevelSection, (req, res) => {
 app.use(bodyParser.json())
 app.use(express.static(path.resolve(__dirname, process.env.DEV_ENVIRONMENT ? './public' : './public/dist')))
 
+app.post('/published', multer().array(), function (req, res) {
+  require('./src/build')
+})
+
 app.post('/contact', multer().array(), function (req, res) {
   sendgrid.send({
     to: 'rick.p.smit@gmail.com',

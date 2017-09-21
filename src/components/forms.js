@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
   Form: {
     // maxWidth: '430px',
     maxWidth: '630px',
-    margin: spacing.space2
+    margin: `${spacing.space2} 0`
   },
   Success: {
     border: '1px solid green'

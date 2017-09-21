@@ -31,12 +31,12 @@ const Templates = class Templates {
     const data = this.pages[target]
     const withoutContainer = StyleSheetServer.renderStatic(() => {
       if (data) {
-        if (!data.template) {
-          return <div><Title data={data} /><Description text={data.description} /></div>
-        } else if (data.template === 'contact') {
+        if (data.template === 'contact') {
           return <div><Title data={data} /><ContactForm /></div>
         } else if (data.template === 'experience') {
-          return <div><Title data={data} /><Description text={data.description} /><Experience jobs={data.list} /></div>
+          return <div><Title data={data} /><Description text={data.description} /><Experience jobs={data.jobs} /></div>
+        } else {
+          return <div><Title data={data} /><Description text={data.description} /></div>
         }
       }
     })
@@ -102,5 +102,3 @@ const Templates = class Templates {
 }
 
 export default Templates
-
-// <View route={target} data={page} />
