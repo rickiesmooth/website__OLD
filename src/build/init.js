@@ -26,9 +26,9 @@ const getMeta = (val) => new Promise((resolve, reject) => {
   })
 })
 
-const fetchPromises = meta.map(val => getMeta(val))
+const initPromise = meta.map(val => getMeta(val))
 
-const init = new Promise((resolve, reject) => {
+initPromise.push(new Promise((resolve, reject) => {
   const client = path.resolve(__dirname, '../../public')
   const staticDirectory = path.resolve(client, 'dist/')
   const partialsDirectory = path.resolve(staticDirectory, 'partials/')
@@ -63,6 +63,6 @@ const init = new Promise((resolve, reject) => {
       resolve()
     }
   })
-})
+}))
 
-module.exports = Promise.all(fetchPromises, init)
+module.exports = Promise.all(initPromise)

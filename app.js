@@ -48,7 +48,7 @@ app.use(bodyParser.json())
 app.use(express.static(path.resolve(__dirname, process.env.DEV_ENVIRONMENT ? './public' : './public/dist')))
 
 app.post('/published', multer().array(), function (req, res) {
-  require('./src/build')
+  require('../dist/build')
 })
 
 app.post('/contact', multer().array(), function (req, res) {
