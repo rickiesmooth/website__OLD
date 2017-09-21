@@ -19,7 +19,8 @@ const getMeta = (val) => new Promise((resolve, reject) => {
     let rawData = ''
     res.on('data', (chunk) => { rawData += chunk })
     res.on('end', () => {
-      resolve(rawData)
+      process.env[val] = rawData
+      resolve()
     })
   })
 })
