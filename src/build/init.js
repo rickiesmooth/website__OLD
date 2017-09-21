@@ -20,14 +20,13 @@ const getMeta = (val) => new Promise((resolve, reject) => {
     res.on('data', (chunk) => { rawData += chunk })
     res.on('end', () => {
       process.env[val] = rawData
+      console.log('✨setting environment var', val)
       resolve()
     })
   })
 })
 
-const fetchPromises = meta.map(val => getMeta(val)
-  .then(response => response.text())
-  .then(response => response))
+const fetchPromises = meta.map(val => getMeta(val))
 
 const init = new Promise((resolve, reject) => {
   const client = path.resolve(__dirname, '../../public')
