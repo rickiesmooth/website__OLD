@@ -65,4 +65,4 @@ const init = new Promise((resolve, reject) => {
   })
 })
 
-module.exports = Promise.all([fetchPromises, init])
+module.exports = Promise.all(fetchPromises, init)
