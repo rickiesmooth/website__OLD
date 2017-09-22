@@ -17,7 +17,7 @@ const port = process.env.PORT || 5000
 const toplevelSection = /([^/]*)(\/|\/index.html)$/
 const bodyParser = require('body-parser')
 
-process.env.NODE_ENV !== 'production' && require('./src/build')()
+process.env.NODE_ENV === 'production' ? require('./dist/build')() : require('./src/build')()
 
 app.get(toplevelSection, (req, res) => {
   req.item = req.params[0] || req.subdomains[0] !== 'www' && req.subdomains[0] || 'home'
@@ -48,8 +48,11 @@ app.get(toplevelSection, (req, res) => {
 app.use(bodyParser.json())
 app.use(express.static(path.resolve(__dirname, './public')))
 
-app.post('/published', multer().array(), function (req, res) {
-  require('./dist/build')
+app.post('/published', function (req, res) {
+  require('./dist/build')({
+    onlyContent: 'true'
+  })
+  res.end('success')
 })
 
 app.post('/contact', multer().array(), function (req, res) {
