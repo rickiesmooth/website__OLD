@@ -49,7 +49,8 @@ app.use(bodyParser.json())
 app.use(express.static(path.resolve(__dirname, process.env.DEV_ENVIRONMENT ? './public' : './public/dist')))
 
 app.post('/published', multer().array(), function (req, res) {
-  require('./dist/build')
+  const spawn = require('child_process').spawn
+  spawn('/opt/bitnami/nodejs/bin/forever', ['restartall'])
 })
 
 app.post('/contact', multer().array(), function (req, res) {
