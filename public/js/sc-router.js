@@ -1,4 +1,4 @@
-(function () {
+export default (function () {
   'use strict'
   class SCRouter extends window.HTMLElement {
 

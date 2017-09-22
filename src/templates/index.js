@@ -5,13 +5,17 @@ import { Header, Container, View, Title, Description, ContactForm, Experience } 
 
 const STYLES = '__STYLES'
 
+const fs = require('fs-extra')
+const path = require('path')
+const config = require('../../tasks/config.json')
+
 const Templates = class Templates {
   constructor (pages) {
     this.parsed = {
       styles: {}
     }
     this.pages = pages
-    this.dev = process.env.DEV_ENVIRONMENT
+    this.dev = process.env.NODE_ENV !== 'production'
   }
 
   set template (template) {
@@ -56,6 +60,9 @@ const Templates = class Templates {
   }
 
   full () {
+    const revisionedAssetManifest = fs.readJsonSync(path.join(
+        config.publicDir, config.manifestFileName), {throws: false}) || {}
+
     const target = this._template
     const partial = this.parsed[this._template].partial
     const full = StyleSheetServer.renderStatic(() => {
@@ -67,13 +74,15 @@ const Templates = class Templates {
           <meta name='theme-color' content='#FF00FF' / >
           <style data-aphrodite>{STYLES}</style>
           <title>{`Rick Smit - ${target}`}</title>
-          <link rel='stylesheet' href={`${(this.dev) ? '' : '/css'}/style.css`} / >
+          <link rel='stylesheet' href='/style.css' / >
           <script
             src='//cdnjs.cloudflare.com/ajax/libs/document-register-element/1.5.0/document-register-element.js' />
           <link rel='preload' href='/' / >
           <link rel='preload' href='/about/' />
           <link rel='preload' href='/contact/' />
           <link rel='preload' href='/experience/' />
+          <script defer src={`/dist/${revisionedAssetManifest['runtime.js']}`} />
+          <script defer src={`/dist/${revisionedAssetManifest['main.js']}`} />
         </head>
         <body>
           <Header />
@@ -90,9 +99,6 @@ const Templates = class Templates {
             </Container>
           </View>
           <sc-router />
-          <script defer src='/js/sc-view.js' />
-          <script defer src='/js/sc-router.js' />
-          <script defer src='/js/app.js' />
         </body>
       </html>
     })

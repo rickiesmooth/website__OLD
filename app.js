@@ -9,7 +9,7 @@ const path = require('path')
 const multer = require('multer')
 
 const sendgrid = require('@sendgrid/mail')
-console.log('✨process.env.SENDGRID_API_KEY', process.env.SENDGRID_API_KEY)
+
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY)
 
 const app = express()
@@ -17,15 +17,15 @@ const port = process.env.PORT || 5000
 const toplevelSection = /([^/]*)(\/|\/index.html)$/
 const bodyParser = require('body-parser')
 
-process.env.DEV_ENVIRONMENT && require('./src/build')
+process.env.NODE_ENV !== 'production' && require('./src/build')()
 
 app.get(toplevelSection, (req, res) => {
   req.item = req.params[0] || req.subdomains[0] !== 'www' && req.subdomains[0] || 'home'
   let file
   if ('partial' in req.query) {
-    file = path.resolve(__dirname, `./public/dist/partials/${req.item}.html`)
+    file = path.resolve(__dirname, `./public/dist/html/partials/${req.item}.html`)
   } else {
-    file = path.resolve(__dirname, `./public/dist/${req.item}.html`)
+    file = path.resolve(__dirname, `./public/dist/html/${req.item}.html`)
   }
 
   fs.readFile(file)
@@ -46,11 +46,10 @@ app.get(toplevelSection, (req, res) => {
 })
 
 app.use(bodyParser.json())
-app.use(express.static(path.resolve(__dirname, process.env.DEV_ENVIRONMENT ? './public' : './public/dist')))
+app.use(express.static(path.resolve(__dirname, './public')))
 
 app.post('/published', multer().array(), function (req, res) {
-  const spawn = require('child_process').spawn
-  spawn('/opt/bitnami/nodejs/bin/forever', ['restartall'])
+  require('./dist/build')
 })
 
 app.post('/contact', multer().array(), function (req, res) {

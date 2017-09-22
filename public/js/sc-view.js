@@ -1,4 +1,4 @@
-(function () {
+export default (function () {
   'use strict'
   const alreadyInjected = {}
   const styleTag = document.querySelector('style[data-aphrodite]')

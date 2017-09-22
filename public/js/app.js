@@ -1,5 +1,6 @@
-(function () {
-  'use strict'
+'use strict'
+
+export default (function () {
   class App {
     constructor () {
       const router = document.querySelector('sc-router')

@@ -1,0 +1,4 @@
+{
+  "publicDir": "public/dist",
+  "manifestFileName": "revisioned-asset-manifest.json"
+}
