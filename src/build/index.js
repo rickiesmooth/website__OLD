@@ -4,10 +4,8 @@ import { createClient } from 'contentful'
 import Template from '../templates'
 
 const write = require('./write')
-const init = require('./init')
 
-init.then(() => {
-  console.log('✨creating client')
+require('./init').then(() => {
   const client = createClient({
     space: 'fvg6uq4s19ja',
     accessToken: process.env.CONTENTFUL_API_KEY

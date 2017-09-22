@@ -5,7 +5,10 @@ const http = require('http')
 const meta = ['SENDGRID_API_KEY', 'CONTENTFUL_API_KEY']
 
 const getMeta = (val) => new Promise((resolve, reject) => {
-  if (process.env.DEV_ENVIRONMENT) { return }
+  if (process.env.DEV_ENVIRONMENT) {
+    resolve()
+    return
+  }
   const options = {
     host: 'metadata.google.internal',
     path: `/computeMetadata/v1/project/attributes/${val}`,
@@ -20,7 +23,6 @@ const getMeta = (val) => new Promise((resolve, reject) => {
     res.on('data', (chunk) => { rawData += chunk })
     res.on('end', () => {
       process.env[val] = rawData
-      console.log('✨setting environment var', val)
       resolve()
     })
   })
@@ -54,9 +56,7 @@ initPromise.push(new Promise((resolve, reject) => {
               `./${items[i]}`))
             )
         }
-        if (err) { reject(err) } else {
-          resolve()
-        }
+        if (err) { reject(err) }
       })
     })
     if (err) { reject(err) } else {

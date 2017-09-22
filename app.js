@@ -9,6 +9,7 @@ const path = require('path')
 const multer = require('multer')
 
 const sendgrid = require('@sendgrid/mail')
+console.log('✨process.env.SENDGRID_API_KEY', process.env.SENDGRID_API_KEY)
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY)
 
 const app = express()

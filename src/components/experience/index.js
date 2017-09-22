@@ -58,7 +58,9 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.space3
+    marginBottom: spacing.space3,
+    paddingBottom: spacing.space3,
+    borderBottom: '1px solid rgba(0,0,0,.1)'
   },
   Titles: {
     flexDirection: 'column',
