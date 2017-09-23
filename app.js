@@ -52,12 +52,19 @@ app.use(bodyParser.json())
 app.use(express.static(path.resolve(__dirname, './public')))
 
 app.post('/published', function (req, res) {
-  (async function (x) {
-    const i = await content()
-    await write(i)
-  })().then(v => {
-    console.log('Build done!')
-    res.end('success')
+  let data = ''
+  req.on('data', (chunk) => { data += chunk })
+  req.on('end', () => {
+    console.log('✨ended', data)
+    const obj = JSON.parse(data)
+    console.log('✨obj', obj)
+    ;(async function (x) {
+      const i = await content()
+      await write(i)
+    })().then(v => {
+      console.log('Updated html files!')
+      res.end('success')
+    })
   })
 })
 
