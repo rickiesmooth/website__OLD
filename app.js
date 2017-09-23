@@ -14,9 +14,7 @@ const toplevelSection = /([^/]*)(\/|\/index.html)$/
 const bodyParser = require('body-parser')
 const http = require('https')
 
-const content = require('./src/build/content')
-const write = require('./src/build/write')
-
+// build everything
 require('./src/build')()
 
 app.get(toplevelSection, (req, res) => {
@@ -49,7 +47,9 @@ app.use(bodyParser.json())
 app.use(express.static(path.resolve(__dirname, './public')))
 
 app.post('/published', function (req, res) {
-  (async function (x) { // async function expression used as an IIFE
+  const content = require('./src/build/content')
+  const write = require('./src/build/write')
+  ;(async function (x) {
     const i = await content()
     await write(i)
   })().then(v => {

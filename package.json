@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "start": "NODE_ENV=production ./bin/www",
+    "start": "NODE_ENV=production ./dist/bin/www",
     "dev": " nodemon --ignore public/dist ./bin/www --exec babel-node",
-    "build": "babel . --ignore node_modules,public -d dist && cp -R public dist/public"
+    "build": "babel . --ignore node_modules,public,dist -d dist && cp -R public dist/public && cp -R ./bin dist/bin"
   },
   "babel": {
     "presets": [
