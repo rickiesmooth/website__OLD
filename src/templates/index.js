@@ -62,7 +62,6 @@ const Templates = class Templates {
   full () {
     const revisionedAssetManifest = fs.readJsonSync(path.join(
         config.publicDir, config.manifestFileName), {throws: false}) || {}
-
     const target = this._template
     const partial = this.parsed[this._template].partial
     const full = StyleSheetServer.renderStatic(() => {
@@ -72,6 +71,7 @@ const Templates = class Templates {
           <meta name='author' content='Rick Smit' />
           <meta name='viewport' content='width=device-width,minimum-scale=1,initial-scale=1' / >
           <meta name='theme-color' content='#FF00FF' / >
+          <meta name='last-modified' content={this.pages[target].updatedAt} />
           <style data-aphrodite>{STYLES}</style>
           <title>{`Rick Smit - ${target}`}</title>
           <link rel='stylesheet' href='/style.css' / >

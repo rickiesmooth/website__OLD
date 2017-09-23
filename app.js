@@ -15,7 +15,12 @@ const bodyParser = require('body-parser')
 const http = require('https')
 
 // build everything
-require('./src/build')()
+const build = require('./src/build')
+
+const content = require('./src/build/content')
+const write = require('./src/build/write')
+
+build()
 
 app.get(toplevelSection, (req, res) => {
   req.item = req.params[0] || req.subdomains[0] !== 'www' && req.subdomains[0] || 'home'
@@ -47,9 +52,7 @@ app.use(bodyParser.json())
 app.use(express.static(path.resolve(__dirname, './public')))
 
 app.post('/published', function (req, res) {
-  const content = require('./src/build/content')
-  const write = require('./src/build/write')
-  ;(async function (x) {
+  (async function (x) {
     const i = await content()
     await write(i)
   })().then(v => {
