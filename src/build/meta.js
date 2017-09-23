@@ -5,10 +5,10 @@ module.exports = async () => {
   if (process.env.SENDGRID_API_KEY && process.env.CONTENTFUL_API_KEY) {
     return [process.env.SENDGRID_API_KEY, process.env.CONTENTFUL_API_KEY]
   } else {
-    await Promise.all(meta.map(val => getMeta(val))).then((envs) => {
-      envs.forEach((env) => {
+    await Promise.all(meta.map(val => getMeta(val))).then((keys) => {
+      keys.forEach((env) => {
         for (var key in env) {
-          process.env[key] = envs[key]
+          process.env[key] = env[key]
         }
       })
     })
