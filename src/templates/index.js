@@ -7,7 +7,7 @@ const STYLES = '__STYLES'
 
 const fs = require('fs-extra')
 const path = require('path')
-const config = require('../../tasks/config.json')
+const config = require('../../tasks/config.js')
 
 const Templates = class Templates {
   constructor (pages) {

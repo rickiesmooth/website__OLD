@@ -8,16 +8,16 @@ const crypto = require('crypto')
 const path = require('path')
 const multer = require('multer')
 
-const sendgrid = require('@sendgrid/mail')
-
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY)
-
 const app = express()
 const port = process.env.PORT || 5000
 const toplevelSection = /([^/]*)(\/|\/index.html)$/
 const bodyParser = require('body-parser')
+const http = require('https')
 
-process.env.NODE_ENV === 'production' ? require('./dist/build')() : require('./src/build')()
+const content = require('./src/build/content')
+const write = require('./src/build/write')
+
+require('./src/build')()
 
 app.get(toplevelSection, (req, res) => {
   req.item = req.params[0] || req.subdomains[0] !== 'www' && req.subdomains[0] || 'home'
@@ -49,20 +49,35 @@ app.use(bodyParser.json())
 app.use(express.static(path.resolve(__dirname, './public')))
 
 app.post('/published', function (req, res) {
-  require('./dist/build')({
-    onlyContent: 'true'
+  (async function (x) { // async function expression used as an IIFE
+    const i = await content()
+    await write(i)
+  })().then(v => {
+    console.log('Build done!')
+    res.end('success')
   })
-  res.end('success')
 })
 
-app.post('/contact', multer().array(), function (req, res) {
-  sendgrid.send({
-    to: 'rick.p.smit@gmail.com',
-    from: req.body.email,
-    subject: `message from ${req.body.name}`,
-    text: req.body.message
+app.post('/contact', multer().array(), function (request, response) {
+  var req = http.request({
+    'method': 'POST',
+    'hostname': 'api.sendgrid.com',
+    'path': '/v3/mail/send',
+    'headers': {
+      'authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
+      'content-type': 'application/json'
+    }
   })
-  res.end('success')
+
+  req.write(JSON.stringify({
+    personalizations: [{ to: [{ email: 'rick.p.smit@gmail.com' }] }],
+    from: { email: request.body.email },
+    subject: `message from ${request.body.name}`,
+    content: [{type: 'text/plain', value: request.body.message}]
+  }))
+
+  req.end()
+  response.end('success')
 })
 
 app.listen(port, err => {

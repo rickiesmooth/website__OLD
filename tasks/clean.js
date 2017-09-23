@@ -1,16 +1,15 @@
 const fs = require('fs-extra')
 const path = require('path')
-const config = require('./config.json')
+const config = require('./config')
 
 module.exports = async () => {
-  const revisionedAssetManifest = await fs.readJson(path.join(
-      config.publicDir, config.manifestFileName), {throws: false}) || {}
+  const manifestFileName = config.manifestFileName
+  const revisionedAssetManifest = await fs.readJson(path.join(config.publicDir, manifestFileName), {throws: false}) || {}
 
   const revisionedAssetFilenames =
       new Set(Object.values(revisionedAssetManifest))
-
   // Get all .js and .map files in the asset manifest.
-  const filenames = (await fs.readdir(config.publicDir)).filter((filename) => {
+  const filenames = (await fs.readdir(path.join(config.publicDir))).filter((filename) => {
     const extname = path.extname(filename)
     return !revisionedAssetFilenames.has(filename) &&
         (extname === '.js' || extname === '.map')

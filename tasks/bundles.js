@@ -1,14 +1,11 @@
-const fs = require('fs-extra')
 const md5 = require('md5')
 const NameAllModulesPlugin = require('name-all-modules-plugin')
-const path = require('path')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const webpack = require('webpack')
 const ManifestPlugin = require('webpack-manifest-plugin')
-const config = require('./config.json')
+const config = require('./config')
 
-let revisionedAssetManifest = fs.readJsonSync(path.join(
-    config.publicDir, config.manifestFileName), {throws: false}) || {}
+let revisionedAssetManifest = config.revisionedAssetManifest
 
 const configurePlugins = (opts = {}) => {
   const plugins = [
@@ -78,7 +75,7 @@ const configureBabelLoader = (browserlist) => {
 
 const baseConfig = {
   output: {
-    path: path.resolve(__dirname, '..', config.publicDir),
+    path: config.publicDir,
     publicPath: '/',
     filename: '[name]-[chunkhash:10].js'
   },
