@@ -55,21 +55,19 @@ app.post('/published', function (req, res) {
   let data = ''
   req.on('data', (chunk) => { data += chunk })
   req.on('end', () => {
-    console.log('✨ended', data)
-    const obj = JSON.parse(data)
-    console.log('✨obj', obj)
-    ;(async function (x) {
+    (async function (x) {
       const i = await content()
       await write(i)
     })().then(v => {
-      console.log('Updated html files!')
+      const obj = JSON.parse(data)
+      console.log('Updated html files!', obj)
       res.end('success')
     })
   })
 })
 
-app.post('/contact', multer().array(), function (request, response) {
-  var req = http.request({
+app.post('/contact', multer().array(), function (req, res) {
+  var request = http.request({
     'method': 'POST',
     'hostname': 'api.sendgrid.com',
     'path': '/v3/mail/send',
@@ -79,15 +77,15 @@ app.post('/contact', multer().array(), function (request, response) {
     }
   })
 
-  req.write(JSON.stringify({
+  request.write(JSON.stringify({
     personalizations: [{ to: [{ email: 'rick.p.smit@gmail.com' }] }],
     from: { email: request.body.email },
     subject: `message from ${request.body.name}`,
     content: [{type: 'text/plain', value: request.body.message}]
   }))
 
-  req.end()
-  response.end('success')
+  request.end()
+  res.end('success')
 })
 
 app.listen(port, err => {
