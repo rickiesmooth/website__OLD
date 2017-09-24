@@ -67,7 +67,7 @@ app.post('/published', function (req, res) {
 })
 
 app.post('/contact', multer().array(), function (req, res) {
-  var request = http.request({
+  const request = http.request({
     'method': 'POST',
     'hostname': 'api.sendgrid.com',
     'path': '/v3/mail/send',
