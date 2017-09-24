@@ -71,6 +71,7 @@ const Templates = class Templates {
           <meta name='author' content='Rick Smit' />
           <meta name='viewport' content='width=device-width,minimum-scale=1,initial-scale=1' / >
           <meta name='theme-color' content='#FF00FF' / >
+          <meta name='version' content={process.env.npm_package_version} />
           <meta property='article:published_time' content={this.pages[target].updatedAt} />
           <style data-aphrodite>{STYLES}</style>
           <title>{`Rick Smit - ${target}`}</title>
