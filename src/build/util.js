@@ -1,4 +1,4 @@
-export function createPage (cur, acc = {}) {
+exports.createPage = function (cur, acc = {}) {
   acc[cur.fields.key] = {
     headline: cur.fields.headline,
     subline: cur.fields.subline || null,

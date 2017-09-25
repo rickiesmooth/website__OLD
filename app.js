@@ -17,7 +17,7 @@ const http = require('https')
 const build = require('./src/build')
 const write = require('./src/build/write')
 
-import createPage from './src/build/util'
+const createPage = require('./src/build/util').createPage
 
 build()
 
