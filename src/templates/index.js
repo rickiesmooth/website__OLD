@@ -10,11 +10,13 @@ const path = require('path')
 const config = require('../../tasks/config.js')
 
 const Templates = class Templates {
-  constructor (pages) {
+  constructor (content) {
     this.parsed = {
       styles: {}
     }
-    this.pages = pages
+
+    this.pages = content.pages
+    this.covers = content.covers
     this.dev = process.env.NODE_ENV !== 'production'
   }
 
@@ -63,8 +65,9 @@ const Templates = class Templates {
     const revisionedAssetManifest = fs.readJsonSync(path.join(
         config.publicDir, config.manifestFileName), {throws: false}) || {}
     const target = this._template
+    const data = this.pages[target] || this.covers[target]
     const partial = this.parsed[this._template].partial
-    // const cover = this.pages[target].cover
+
     const full = StyleSheetServer.renderStatic(() => {
       return <html>
         <head>
@@ -73,7 +76,7 @@ const Templates = class Templates {
           <meta name='viewport' content='width=device-width,minimum-scale=1,initial-scale=1' / >
           <meta name='theme-color' content='#FF00FF' / >
           <meta name='version' content={process.env.npm_package_version} />
-          <meta property='article:published_time' content={this.pages[target].updatedAt} />
+          <meta property='article:published_time' content={data.updatedAt} />
           <style data-aphrodite>{STYLES}</style>
           <title>{`Rick Smit - ${target}`}</title>
           <link rel='stylesheet' href='/style.css' / >
@@ -90,7 +93,7 @@ const Templates = class Templates {
           <Header />
           {
             Object.keys(this.pages).map((key) => {
-              if (key !== 'snapchat' && key !== target) {
+              if (key !== target) {
                 return (<View remote route={key} />)
               }
             })

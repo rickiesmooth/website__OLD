@@ -2,21 +2,22 @@ import { createClient } from 'contentful'
 
 module.exports = async (page) => {
   function structurePage (acc, cur) {
-    acc[cur.fields.key] = {
+    const data = {
       headline: cur.fields.headline,
       subline: cur.fields.subline || null,
       description: cur.fields.description || null,
       updatedAt: cur.sys.updatedAt,
       template: cur.fields.key
     }
-    if (cur.fields.json) {
-      if (cur.fields.json.jobs) {
-        const experience = cur.fields.json.jobs
-        acc[cur.fields.key].jobs = Object.keys(experience).map((k) => experience[k])
-      } else if (cur.fields.json.cover) {
-        acc[cur.fields.key].cover = true
-      }
+    const json = cur.fields.json
+
+    if (json && json.jobs) {
+      const experience = cur.fields.json.jobs
+      data.jobs = Object.keys(experience).map((k) => experience[k])
     }
+
+    json && json.cover ? (acc.covers[cur.fields.key] = data) : (acc.pages[cur.fields.key] = data)
+    // acc.covers = data
     return acc
   }
 
@@ -29,7 +30,10 @@ module.exports = async (page) => {
       'content_type': 'pages',
       order: '-sys.createdAt'
     })
-    const pages = entries.then(entries => entries.items.reduce(structurePage, {}))
+    const pages = entries.then(entries => entries.items.reduce(structurePage, {
+      pages: {},
+      covers: {}
+    }))
     resolve(pages)
   })
 
