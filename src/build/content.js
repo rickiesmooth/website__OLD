@@ -1,6 +1,6 @@
 import { createClient } from 'contentful'
 
-module.exports = async (p) => {
+module.exports = async (page) => {
   function structurePage (acc, cur) {
     acc[cur.fields.key] = {
       headline: cur.fields.headline,
@@ -29,5 +29,5 @@ module.exports = async (p) => {
     resolve(pages)
   })
 
-  return p && structurePage({}, p) || await Promise.resolve(getPages)
+  return page && structurePage({single: true}, page) || await Promise.resolve(getPages)
 }
