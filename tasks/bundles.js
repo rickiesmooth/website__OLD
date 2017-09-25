@@ -1,9 +1,9 @@
-const md5 = require('md5')
 const NameAllModulesPlugin = require('name-all-modules-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const webpack = require('webpack')
 const ManifestPlugin = require('webpack-manifest-plugin')
 const config = require('./config')
+const crypto = require('crypto')
 
 let revisionedAssetManifest = config.revisionedAssetManifest
 
@@ -17,7 +17,7 @@ const configurePlugins = (opts = {}) => {
     // long-term caching. Solution adapted from:
     // https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31
     new webpack.NamedChunksPlugin((chunk) => chunk.name ? chunk.name
-    : md5(chunk.mapModules((m) => m.identifier()).join()).slice(0, 10)),
+    : crypto.createHash('md5')(chunk.mapModules((m) => m.identifier()).join()).slice(0, 10)),
 
     // Extract runtime code so updates don't affect app-code caching:
     // https://webpack.js.org/guides/caching/

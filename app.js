@@ -3,7 +3,7 @@
 'use strict'
 
 const express = require('express')
-const fs = require('mz/fs')
+const fs = require('fs-extra')
 const crypto = require('crypto')
 const path = require('path')
 const multer = require('multer')
@@ -11,7 +11,6 @@ const multer = require('multer')
 const app = express()
 const port = process.env.PORT || 5000
 const toplevelSection = /([^/]*)(\/|\/index.html)$/
-const bodyParser = require('body-parser')
 const http = require('https')
 
 // build everything
@@ -48,7 +47,6 @@ app.get(toplevelSection, (req, res) => {
   .catch(error => res.status(500).send(error.toString()))
 })
 
-app.use(bodyParser.json())
 app.use(express.static(path.resolve(__dirname, './public')))
 
 app.post('/published', function (req, res) {
