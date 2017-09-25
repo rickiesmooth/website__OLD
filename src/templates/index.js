@@ -94,11 +94,14 @@ const Templates = class Templates {
               }
             })
           }
-          <View route={target} >
-            <Container target={target}>
-              { partial.forFull }
-            </Container>
-          </View>
+          {
+            !this.pages.cover &&
+              <View route={target} >
+                <Container target={target}>
+                  { partial.forFull }
+                </Container>
+              </View>
+          }
           <sc-router />
         </body>
       </html>
