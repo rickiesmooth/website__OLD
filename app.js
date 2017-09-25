@@ -15,9 +15,9 @@ const http = require('https')
 
 // build everything
 const build = require('./src/build')
-const write = require('./src/build/write')
 
-const createPage = require('./src/build/util').createPage
+const content = require('./src/build/content')
+const write = require('./src/build/write')
 
 build()
 
@@ -53,11 +53,18 @@ app.post('/published', function (req, res) {
   let data = ''
   req.on('data', (chunk) => { data += chunk })
   req.on('end', () => {
-    (async function (x) {
-      const i = createPage(JSON.parse(data))
+    (async function () {
+      const fields = JSON.parse(data).fields
+      if (fields) {
+        for (var key in fields) {
+          fields[key] = fields[key]['en-US']
+        }
+      }
+      const i = await content()
       await write(i)
     })().then(v => {
-      console.log('Updated html files!')
+      const obj = JSON.parse(data)
+      console.log('Updated html files!', obj)
       res.end('success')
     })
   })
@@ -89,4 +96,3 @@ app.listen(port, err => {
   if (err) { throw new Error(err) }
   console.log('listening on port', port)
 })
-
