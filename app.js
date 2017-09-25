@@ -91,4 +91,3 @@ app.listen(port, err => {
   console.log('listening on port', port)
 })
 
-module.exports = app
