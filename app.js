@@ -54,17 +54,16 @@ app.post('/published', function (req, res) {
   req.on('data', (chunk) => { data += chunk })
   req.on('end', () => {
     (async function () {
-      const fields = JSON.parse(data).fields
-      if (fields) {
-        for (var key in fields) {
-          fields[key] = fields[key]['en-US']
+      const obj = JSON.parse(data)
+      if (obj) {
+        for (var key in obj.fields) {
+          obj.fields[key] = obj.fields[key]['en-US']
         }
       }
-      const i = await content()
+      const i = await content(obj)
       await write(i)
     })().then(v => {
-      const obj = JSON.parse(data)
-      console.log('Updated html files!', obj)
+      console.log('Updated html files!')
       res.end('success')
     })
   })
