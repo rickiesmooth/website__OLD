@@ -95,7 +95,7 @@ const Templates = class Templates {
             })
           }
           {
-            !this.pages.cover &&
+            !this.pages[target].cover &&
               <View route={target} >
                 <Container target={target}>
                   { partial.forFull }
