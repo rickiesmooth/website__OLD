@@ -10,12 +10,12 @@ const path = require('path')
 const config = require('../../tasks/config.js')
 
 const Templates = class Templates {
-  constructor (content) {
+  constructor (pages) {
     this.parsed = {
       styles: {}
     }
 
-    this.pages = content.pages
+    this.pages = pages
     this.dev = process.env.NODE_ENV !== 'production'
   }
 

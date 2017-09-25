@@ -23,12 +23,4 @@ module.exports = async (pages, single) => {
     fs.writeFile(path.resolve(partialsDirectory, `./${page}.html`), style + data.partial.html)
     fs.writeFile(path.resolve(htmlDirectory, `./${page}.html`), data.full.html)
   }
-  // for (var cover in t.covers) {
-  //   t.template = cover
-  //   const parsedCover = t.parsed[cover]
-  //   const style = `<style type="text/css">${parsedCover.partial.css.content}</style>`
-  //   fs.writeFile(path.resolve(partialsDirectory, `./${cover}.html`), style + parsedCover.partial.html)
-  //   fs.writeFile(path.resolve(htmlDirectory, `./${cover}.html`), parsedCover.full.html)
-  //   console.log('✨cover', htmlDirectory, `./${cover}.html`)
-  // }
 }
