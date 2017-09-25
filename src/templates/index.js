@@ -94,7 +94,7 @@ const Templates = class Templates {
           {
             Object.keys(this.pages).map((key) => {
               console.log('✨key', key)
-              if (key !== target && key === 'home') {
+              if (key !== target && key !== 'home') {
                 return (<View remote route={key} />)
               }
             })
