@@ -5,7 +5,7 @@ import { spacing } from '../styles/spacing'
 
 export function View (props) {
   const { children, route, remote } = props
-  const target = (route === 'home') ? '^/$' : `^/${route}/(.*)`
+  const target = (route === 'home' || route === 'snapchat') ? '^/$' : `^/${route}/(.*)`
   return <sc-view remote={remote} class={css(styles.View)} route={target}>{children}</sc-view>
 }
 
