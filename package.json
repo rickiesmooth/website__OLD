@@ -5,8 +5,8 @@
   "scripts": {
     "start": "NODE_ENV=production ./dist/app.js",
     "dev": " nodemon --ignore public/dist ./bin/www --exec babel-node",
-    "postinstall": "npm run build",
-    "build": "babel . --ignore node_modules,public,dist -d dist && cp -R public dist/public && cp -R ./bin dist/bin"
+    "postinstall": "rm -rf ./dist && npm run build",
+    "build": "babel . --ignore node_modules,public,dist -d dist && cp -R public dist/public"
   },
   "babel": {
     "presets": [
