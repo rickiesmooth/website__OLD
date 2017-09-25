@@ -5,8 +5,8 @@ module.exports = async () => {
   if (process.env.SENDGRID_API_KEY && process.env.CONTENTFUL_API_KEY) {
     return [process.env.SENDGRID_API_KEY, process.env.CONTENTFUL_API_KEY]
   } else {
-    await Promise.all(meta.map(val => getMeta(val))).then((keys) => {
-      keys.forEach((env) => {
+    await Promise.all(meta.map(val => getMeta(val))).then(keys => {
+      keys.forEach(env => {
         for (var key in env) {
           process.env[key] = env[key]
         }
@@ -25,11 +25,9 @@ const getMeta = (val) => new Promise((resolve, reject) => {
     }
   }
 
-  http.get(options, (res) => {
+  http.get(options, res => {
     let rawData = ''
-    res.on('data', (chunk) => { rawData += chunk })
-    res.on('end', () => {
-      resolve({[val]: rawData})
-    })
+    res.on('data', chunk => { rawData += chunk })
+    res.on('end', () => resolve({[val]: rawData}))
   })
 })

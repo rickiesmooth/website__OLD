@@ -10,8 +10,12 @@ module.exports = async (page) => {
       template: cur.fields.key
     }
     if (cur.fields.json) {
-      const experience = cur.fields.json.jobs
-      acc[cur.fields.key].jobs = Object.keys(experience).map((k) => experience[k])
+      if (cur.fields.json.jobs) {
+        const experience = cur.fields.json.jobs
+        acc[cur.fields.key].jobs = Object.keys(experience).map((k) => experience[k])
+      } else if (cur.fields.json.cover) {
+        acc[cur.fields.key].cover = true
+      }
     }
     return acc
   }
