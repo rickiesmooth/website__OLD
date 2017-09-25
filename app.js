@@ -55,7 +55,7 @@ app.post('/published', function (req, res) {
   req.on('end', () => {
     (async function () {
       const obj = JSON.parse(data)
-      if (obj) {
+      if (obj && obj.fields) {
         for (var key in obj.fields) {
           obj.fields[key] = obj.fields[key]['en-US']
         }

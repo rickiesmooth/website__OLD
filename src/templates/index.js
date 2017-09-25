@@ -94,7 +94,9 @@ const Templates = class Templates {
             Object.keys(this.pages).map((key) => {
               if (key !== target) {
                 // dont show coverletters in the router
-                if (!this.pages[target].cover && !this.pages[key].cover || (this.pages[target].cover && key !== 'home')) {
+                if (
+                  (!this.pages[target].cover && !this.pages[key].cover) ||
+                  (this.pages[target].cover && key !== 'home')) {
                   return (<View remote route={key} />)
                 }
               }

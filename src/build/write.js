@@ -15,7 +15,6 @@ module.exports = async (pages, single) => {
     fs.mkdirSync(htmlDirectory)
     fs.mkdirSync(partialsDirectory)
   }
-
   for (var page in t.pages) {
     t.template = page
     const data = t.parsed[page]
