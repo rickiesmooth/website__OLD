@@ -15,9 +15,9 @@ const http = require('https')
 
 // build everything
 const build = require('./src/build')
-
-const content = require('./src/build/content')
 const write = require('./src/build/write')
+
+import createPage from './src/build/util'
 
 build()
 
@@ -54,11 +54,10 @@ app.post('/published', function (req, res) {
   req.on('data', (chunk) => { data += chunk })
   req.on('end', () => {
     (async function (x) {
-      const i = await content()
+      const i = createPage(JSON.parse(data))
       await write(i)
     })().then(v => {
-      const obj = JSON.parse(data)
-      console.log('Updated html files!', obj)
+      console.log('Updated html files!')
       res.end('success')
     })
   })
