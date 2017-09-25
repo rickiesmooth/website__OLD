@@ -89,19 +89,16 @@ const Templates = class Templates {
           <Header />
           {
             Object.keys(this.pages).map((key) => {
-              if (key !== target && !this.pages[key].cover) {
+              if (key !== target) {
                 return (<View remote route={key} />)
               }
             })
           }
-          {
-            !this.pages[target].cover &&
-              <View route={target} >
-                <Container target={target}>
-                  { partial.forFull }
-                </Container>
-              </View>
-          }
+          <View route={target} >
+            <Container target={target}>
+              { partial.forFull }
+            </Container>
+          </View>
           <sc-router />
         </body>
       </html>
