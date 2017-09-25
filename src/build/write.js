@@ -10,7 +10,7 @@ const partialsDirectory = path.resolve(htmlDirectory, './partials')
 module.exports = async (pages) => {
   const t = new Template(pages)
 
-  fs.existsSync(htmlDirectory) && fs.removeSync(htmlDirectory)
+  fs.existsSync(htmlDirectory) && !pages.single && fs.removeSync(htmlDirectory)
   fs.mkdirSync(htmlDirectory)
   fs.mkdirSync(partialsDirectory)
 
