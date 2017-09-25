@@ -3,7 +3,7 @@ const path = require('path')
 
 import Template from '../templates'
 
-const staticDirectory = path.resolve(__dirname, '../../public')
+const staticDirectory = path.resolve(__dirname, '../../public/dist')
 const htmlDirectory = path.resolve(staticDirectory, './html')
 const partialsDirectory = path.resolve(htmlDirectory, './partials')
 
