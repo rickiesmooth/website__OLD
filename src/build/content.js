@@ -8,22 +8,16 @@ module.exports = async (page) => {
       subline: cur.fields.subline || null,
       description: cur.fields.description || null,
       updatedAt: cur.sys.updatedAt,
-      template: cur.fields.key
+      template: cur.fields.key,
+      cover: json && json.cover
     }
-    // console.log('✨json && json.cover', cur.fields.key, json && json.jobs)
 
     if (json && json.jobs) {
       const experience = cur.fields.json.jobs
       data.jobs = Object.keys(experience).map((k) => experience[k])
     }
 
-    if (json && json.cover) {
-      data.cover = true
-    } else {
-      data.cover = false
-    }
-
-    acc.pages[cur.fields.key] = data
+    acc[cur.fields.key] = data
     return acc
   }
 
@@ -36,10 +30,7 @@ module.exports = async (page) => {
       'content_type': 'pages',
       order: '-sys.createdAt'
     })
-    const pages = entries.then(entries => entries.items.reduce(structurePage, {
-      pages: {},
-      covers: {}
-    }))
+    const pages = entries.then(entries => entries.items.reduce(structurePage, {}))
     resolve(pages)
   })
 

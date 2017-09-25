@@ -16,7 +16,6 @@ const Templates = class Templates {
     }
 
     this.pages = content.pages
-    this.covers = content.covers
     this.dev = process.env.NODE_ENV !== 'production'
   }
 
@@ -34,7 +33,7 @@ const Templates = class Templates {
   partial () {
     // TODO: Fix this mess
     const target = this._template
-    const data = this.pages[target] || this.covers[target]
+    const data = this.pages[target]
     const withoutContainer = StyleSheetServer.renderStatic(() => {
       if (data) {
         if (data.template === 'contact') {
@@ -93,9 +92,13 @@ const Templates = class Templates {
           <Header />
           {
             Object.keys(this.pages).map((key) => {
-              const dontRenderInRouter = !(this.pages[target].cover || this.pages[key].cover)
-              if (key !== target && dontRenderInRouter) {
-                return (<View remote route={key} />)
+              if (key !== target) {
+                // dont show coverletters in the router
+                if (!this.pages[target].cover && !this.pages[key].cover) {
+                  return (<View remote route={key} />)
+                } else if (this.pages[target].cover && key !== 'home') {
+                  return (<View remote route={key} />)
+                }
               }
             })
           }
