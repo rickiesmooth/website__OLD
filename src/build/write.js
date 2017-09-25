@@ -7,10 +7,10 @@ const staticDirectory = path.resolve(__dirname, '../../public/dist')
 const htmlDirectory = path.resolve(staticDirectory, './html')
 const partialsDirectory = path.resolve(htmlDirectory, './partials')
 
-module.exports = async (pages) => {
+module.exports = async (pages, single) => {
   const t = new Template(pages)
 
-  if (!pages.single) {
+  if (!single) {
     fs.existsSync(htmlDirectory) && fs.removeSync(htmlDirectory)
     fs.mkdirSync(htmlDirectory)
     fs.mkdirSync(partialsDirectory)

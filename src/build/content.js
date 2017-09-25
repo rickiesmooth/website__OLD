@@ -29,5 +29,5 @@ module.exports = async (page) => {
     resolve(pages)
   })
 
-  return page && structurePage({single: true}, page) || await Promise.resolve(getPages)
+  return page && structurePage(page) || await Promise.resolve(getPages)
 }

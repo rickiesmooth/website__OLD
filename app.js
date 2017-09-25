@@ -61,7 +61,7 @@ app.post('/published', function (req, res) {
         }
       }
       const i = await content(obj)
-      await write(i)
+      await write(i, true)
     })().then(v => {
       console.log('Updated html files!')
       res.end('success')
