@@ -65,7 +65,7 @@ const Templates = class Templates {
     const revisionedAssetManifest = fs.readJsonSync(path.join(
         config.publicDir, config.manifestFileName), {throws: false}) || {}
     const target = this._template
-    const data = this.pages[target] || this.covers[target]
+    const data = this.pages[target]
     const partial = this.parsed[this._template].partial
 
     const full = StyleSheetServer.renderStatic(() => {
@@ -93,8 +93,8 @@ const Templates = class Templates {
           <Header />
           {
             Object.keys(this.pages).map((key) => {
-              // console.log('✨data.cover', )
-              if (key !== target && (this.covers[target] && key !== 'home')) {
+              const dontRenderInRouter = !(this.pages[target].cover || this.pages[key].cover)
+              if (key !== target && dontRenderInRouter) {
                 return (<View remote route={key} />)
               }
             })

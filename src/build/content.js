@@ -2,6 +2,7 @@ import { createClient } from 'contentful'
 
 module.exports = async (page) => {
   function structurePage (acc, cur) {
+    const json = cur.fields.json
     const data = {
       headline: cur.fields.headline,
       subline: cur.fields.subline || null,
@@ -9,15 +10,20 @@ module.exports = async (page) => {
       updatedAt: cur.sys.updatedAt,
       template: cur.fields.key
     }
-    const json = cur.fields.json
+    // console.log('✨json && json.cover', cur.fields.key, json && json.jobs)
 
     if (json && json.jobs) {
       const experience = cur.fields.json.jobs
       data.jobs = Object.keys(experience).map((k) => experience[k])
     }
 
-    json && json.cover ? (acc.covers[cur.fields.key] = data) : (acc.pages[cur.fields.key] = data)
-    // acc.covers = data
+    if (json && json.cover) {
+      data.cover = true
+    } else {
+      data.cover = false
+    }
+
+    acc.pages[cur.fields.key] = data
     return acc
   }
 
