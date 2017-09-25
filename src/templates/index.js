@@ -64,7 +64,7 @@ const Templates = class Templates {
         config.publicDir, config.manifestFileName), {throws: false}) || {}
     const target = this._template
     const partial = this.parsed[this._template].partial
-    const cover = this.pages[target].cover
+    // const cover = this.pages[target].cover
     const full = StyleSheetServer.renderStatic(() => {
       return <html>
         <head>
@@ -90,7 +90,7 @@ const Templates = class Templates {
           <Header />
           {
             Object.keys(this.pages).map((key) => {
-              if (!cover && key !== target) {
+              if (key !== 'snapchat' && key !== target) {
                 return (<View remote route={key} />)
               }
             })
