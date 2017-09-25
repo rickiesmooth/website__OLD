@@ -77,9 +77,9 @@ app.post('/contact', multer().array(), function (req, res) {
 
   request.write(JSON.stringify({
     personalizations: [{ to: [{ email: 'rick.p.smit@gmail.com' }] }],
-    from: { email: request.body.email },
-    subject: `message from ${request.body.name}`,
-    content: [{type: 'text/plain', value: request.body.message}]
+    from: { email: req.body.email },
+    subject: `message from ${req.body.name}`,
+    content: [{type: 'text/plain', value: req.body.message}]
   }))
 
   request.end()
