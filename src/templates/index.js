@@ -34,7 +34,7 @@ const Templates = class Templates {
   partial () {
     // TODO: Fix this mess
     const target = this._template
-    const data = this.pages[target]
+    const data = this.pages[target] || this.covers[target]
     const withoutContainer = StyleSheetServer.renderStatic(() => {
       if (data) {
         if (data.template === 'contact') {
