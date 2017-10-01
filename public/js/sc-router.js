@@ -55,13 +55,13 @@ export default (function() {
     _addRoutes() {
       let views = document.querySelectorAll('sc-view')
       // let views = Array.from(document.querySelectorAll('sc-view'))
-      for (var i = 0; i < views.length; ++i) {
-        if (!views[i].route) {
+      views.forEach(view => {
+        if (!view.route) {
           return
         }
 
-        this.addRoute(new RegExp(views[i].route, 'i'), views[i])
-      }
+        this.addRoute(new RegExp(view.route, 'i'), view)
+      })
     }
 
     _removeRoute(route) {

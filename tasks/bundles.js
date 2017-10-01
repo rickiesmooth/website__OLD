@@ -1,11 +1,16 @@
+const fs = require('fs-extra')
+const crypto = require('crypto')
 const NameAllModulesPlugin = require('name-all-modules-plugin')
+const path = require('path')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const webpack = require('webpack')
 const ManifestPlugin = require('webpack-manifest-plugin')
-const config = require('./config')
-const crypto = require('crypto')
+const config = require('./config.js')
 
-let revisionedAssetManifest = config.revisionedAssetManifest
+let revisionedAssetManifest =
+  fs.readJsonSync(path.join(config.publicDir, config.manifestFileName), {
+    throws: false
+  }) || {}
 
 const configurePlugins = (opts = {}) => {
   const plugins = [
@@ -86,7 +91,7 @@ const configureBabelLoader = browserlist => {
 
 const baseConfig = {
   output: {
-    path: config.publicDir,
+    path: path.resolve(__dirname, '..', config.publicDir),
     publicPath: '/',
     filename: '[name]-[chunkhash:10].js'
   },
@@ -94,34 +99,34 @@ const baseConfig = {
   devtool: '#source-map'
 }
 
-// const modernConfig = Object.assign({}, baseConfig, {
-//   entry: {
-//     main: './public/js'
-//   },
-//   plugins: configurePlugins({ runtimeName: 'runtime' }),
-//   module: {
-//     rules: [
-//       configureBabelLoader([
-//         // The last two versions of each browser, excluding versions
-//         // that don't support <script type="module">.
-//         'last 2 Chrome versions',
-//         'not Chrome < 60',
-//         'last 2 Safari versions',
-//         'not Safari < 10.1',
-//         'last 2 iOS versions',
-//         'not iOS < 10.3',
-//         'last 2 Firefox versions',
-//         'not Firefox < 54',
-//         'last 2 Edge versions',
-//         'not Edge < 15'
-//       ])
-//     ]
-//   }
-// })
+const modernConfig = Object.assign({}, baseConfig, {
+  entry: {
+    main: './public/js/index.js'
+  },
+  plugins: configurePlugins({ runtimeName: 'runtime' }),
+  module: {
+    rules: [
+      configureBabelLoader([
+        // The last two versions of each browser, excluding versions
+        // that don't support <script type="module">.
+        'last 2 Chrome versions',
+        'not Chrome < 60',
+        'last 2 Safari versions',
+        'not Safari < 10.1',
+        'last 2 iOS versions',
+        'not iOS < 10.3',
+        'last 2 Firefox versions',
+        'not Firefox < 54',
+        'last 2 Edge versions',
+        'not Edge < 15'
+      ])
+    ]
+  }
+})
 
 const legacyConfig = Object.assign({}, baseConfig, {
   entry: {
-    'main-legacy': './public/js'
+    'main-legacy': './public/js/index-legacy.js'
   },
   plugins: configurePlugins({ runtimeName: 'runtime-legacy' }),
   module: {
@@ -142,11 +147,11 @@ const createCompiler = config => {
   }
 }
 
-// const compileModernBundle = createCompiler(modernConfig)
+const compileModernBundle = createCompiler(modernConfig)
 const compileLegacyBundle = createCompiler(legacyConfig)
 
 module.exports = async () => {
   revisionedAssetManifest = {}
-  // await compileModernBundle()
+  await compileModernBundle()
   await compileLegacyBundle()
 }

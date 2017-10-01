@@ -44,9 +44,7 @@ export default (function() {
         const newDoc = evt.target.response
         const newView = newDoc.querySelector('sc-view')
         const newStyles = newDoc.querySelector('style')
-        for (var i = 0; i < newView.childNodes.length; ++i) {
-          this._view.appendChild(newView.childNodes[i])
-        }
+        newView.childNodes.forEach(node => this._view.appendChild(node))
         this.appendChild(this._view)
         this._loadStyles(newStyles)
       }
@@ -130,8 +128,7 @@ export default (function() {
     attributeChangedCallback(name, oldValue, newValue) {
       const menuItems = this.querySelectorAll('a')
       const home = newValue === '/'
-      for (var i = 0; i < menuItems.length; ++i) {
-        const node = menuItems[i]
+      menuItems.forEach(node => {
         const logo = node.id === 'logo'
         const href = node.getAttribute('href')
         if (logo && home) {
@@ -148,7 +145,7 @@ export default (function() {
 
         node.style.borderBottom =
           href === newValue ? '1px solid rgba(0,0,0,5)' : null
-      }
+      })
     }
   }
 

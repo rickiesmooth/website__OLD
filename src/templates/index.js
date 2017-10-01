@@ -89,6 +89,7 @@ const Templates = class Templates {
       fs.readJsonSync(path.join(config.publicDir, config.manifestFileName), {
         throws: false
       }) || {}
+
     const target = this._template
     const data = this.pages[target]
     const partial = this.parsed[this._template].partial
@@ -115,12 +116,12 @@ const Templates = class Templates {
             <link rel="preload" href="/contact/" />
             <link rel="preload" href="/experience/" />
             <script
-              defer
-              src={`/dist/${revisionedAssetManifest['runtime-legacy.js']}`}
+              type="module"
+              src={`/dist/${revisionedAssetManifest['runtime.js']}`}
             />
             <script
-              defer
-              src={`/dist/${revisionedAssetManifest['main-legacy.js']}`}
+              type="module"
+              src={`/dist/${revisionedAssetManifest['main.js']}`}
             />
           </head>
           <body>
@@ -140,6 +141,14 @@ const Templates = class Templates {
               <Container target={target}>{partial.forFull}</Container>
             </View>
             <sc-router />
+            <script
+              nomodule
+              src={`/dist/${revisionedAssetManifest['runtime-legacy.js']}`}
+            />
+            <script
+              nomodule
+              src={`/dist/${revisionedAssetManifest['main-legacy.js']}`}
+            />
           </body>
         </html>
       )

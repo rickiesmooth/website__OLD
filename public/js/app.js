@@ -9,9 +9,10 @@ export default (function() {
         evt.preventDefault()
         router.go(evt.target.href)
       }
-      for (var i = 0; i < links.length; ++i) {
-        links[i].addEventListener('click', onClick)
-      }
+      console.log('✨links', links)
+      links.forEach(link => {
+        link.addEventListener('click', onClick)
+      })
     }
   }
 
