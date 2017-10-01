@@ -1,20 +1,19 @@
 'use strict'
 
-export default (function () {
+export default (function() {
   class App {
-    constructor () {
+    constructor() {
       const router = document.querySelector('sc-router')
       const links = document.querySelectorAll('a')
-      function onClick (evt) {
+      function onClick(evt) {
         evt.preventDefault()
         router.go(evt.target.href)
       }
-
-      links.forEach(link => {
-        link.addEventListener('click', onClick)
-      })
+      for (var i = 0; i < links.length; ++i) {
+        links[i].addEventListener('click', onClick)
+      }
     }
   }
 
-  (_ => new App())()
-}())
+  ;(_ => new App())()
+})()

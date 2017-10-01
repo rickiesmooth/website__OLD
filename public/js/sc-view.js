@@ -1,9 +1,9 @@
-export default (function () {
-  'use strict'
+export default (function() {
+  ;('use strict')
   const alreadyInjected = {}
   const styleTag = document.querySelector('style[data-aphrodite]')
 
-  function getStyleKey (tag, rule) {
+  function getStyleKey(tag, rule) {
     if (typeof rule === 'object') {
       const selectorText = rule.selectorText || rule.cssRules[0].selectorText
       const mediaQuerie = rule.conditionText || ''
@@ -12,20 +12,21 @@ export default (function () {
   }
 
   class SCView extends window.HTMLElement {
-
-    createdCallback () {
+    createdCallback() {
       this._view = null
-      this._isRemote = (this.getAttribute('remote') !== null)
+      this._isRemote = this.getAttribute('remote') !== null
       for (var rule in styleTag.sheet.rules) {
-        alreadyInjected[getStyleKey(styleTag, styleTag.sheet.rules[rule])] = true
+        alreadyInjected[
+          getStyleKey(styleTag, styleTag.sheet.rules[rule])
+        ] = true
       }
     }
 
-    get route () {
+    get route() {
       return this.getAttribute('route') || null
     }
 
-    _loadStyles (styles) {
+    _loadStyles(styles) {
       const classes = styles.sheet.rules || styles.sheet.cssRules
       for (var rule in classes) {
         const key = getStyleKey(styleTag, classes[rule])
@@ -36,15 +37,16 @@ export default (function () {
       }
     }
 
-    _loadView (data) {
+    _loadView(data) {
       this._view = new window.DocumentFragment()
       const xhr = new window.XMLHttpRequest()
-
       xhr.onload = evt => {
         const newDoc = evt.target.response
         const newView = newDoc.querySelector('sc-view')
         const newStyles = newDoc.querySelector('style')
-        newView.childNodes.forEach(node => this._view.appendChild(node))
+        for (var i = 0; i < newView.childNodes.length; ++i) {
+          this._view.appendChild(newView.childNodes[i])
+        }
         this.appendChild(this._view)
         this._loadStyles(newStyles)
       }
@@ -53,8 +55,10 @@ export default (function () {
       xhr.send()
     }
 
-    in (data) {
-      if (this._isRemote && !this._view) { this._loadView(data) }
+    in(data) {
+      if (this._isRemote && !this._view) {
+        this._loadView(data)
+      }
 
       return new Promise((resolve, reject) => {
         const onTransitionEnd = () => {
@@ -67,7 +71,7 @@ export default (function () {
       })
     }
 
-    out () {
+    out() {
       return new Promise((resolve, reject) => {
         const onTransitionEnd = () => {
           this.removeEventListener('transitionend', onTransitionEnd)
@@ -79,28 +83,35 @@ export default (function () {
       })
     }
 
-    update () {
+    update() {
       return Promise.resolve()
     }
   }
 
   class CustomForm extends window.HTMLElement {
-    connectedCallback () {
+    connectedCallback() {
       const form = this.firstChild
       const inputs = form.querySelectorAll('input, textarea')
 
-      inputs.forEach((node) => {
-        node.oninput = function (val) {
-          this.parentNode.getElementsByTagName('label')[0].style.display = (this.value) ? 'none' : 'block'
+      inputs.forEach(node => {
+        node.oninput = function(val) {
+          this.parentNode.getElementsByTagName('label')[0].style.display = this
+            .value
+            ? 'none'
+            : 'block'
         }
       })
 
-      form.onsubmit = function (e) {
-        window.fetch(form.action, {
-          method: form.method || 'POST',
-          body: new window.FormData(form)
-        }).then(function (res) { return res.text() })
-          .then(function (data) {
+      form.onsubmit = function(e) {
+        window
+          .fetch(form.action, {
+            method: form.method || 'POST',
+            body: new window.FormData(form)
+          })
+          .then(function(res) {
+            return res.text()
+          })
+          .then(function(data) {
             if (data === 'success') {
               const view = form.parentNode.parentNode
               const headline = view.getElementsByTagName('h1')[0]
@@ -116,11 +127,11 @@ export default (function () {
   }
 
   class CustomNav extends window.HTMLElement {
-    attributeChangedCallback (name, oldValue, newValue) {
+    attributeChangedCallback(name, oldValue, newValue) {
       const menuItems = this.querySelectorAll('a')
       const home = newValue === '/'
-
-      menuItems.forEach(node => {
+      for (var i = 0; i < menuItems.length; ++i) {
+        const node = menuItems[i]
         const logo = node.id === 'logo'
         const href = node.getAttribute('href')
         if (logo && home) {
@@ -135,8 +146,9 @@ export default (function () {
           node.style.transform = null
         }
 
-        node.style.borderBottom = (href === newValue) ? '1px solid rgba(0,0,0,5)' : null
-      })
+        node.style.borderBottom =
+          href === newValue ? '1px solid rgba(0,0,0,5)' : null
+      }
     }
   }
 

@@ -1,8 +1,7 @@
-export default (function () {
+export default (function() {
   'use strict'
   class SCRouter extends window.HTMLElement {
-
-    _onChanged () {
+    _onChanged() {
       const path = window.location.pathname
       const routes = Array.from(this._routes.keys())
       const route = routes.find(r => r.test(path))
@@ -33,20 +32,19 @@ export default (function () {
       const header = document.querySelector('sc-nav')
       header.setAttribute('active', data.input)
 
-      return outViewPromise
-        .then(_ => {
-          this._currentView = this._newView
-          this._isTransitioningBetweenViews = false
-          return this._newView.in(data)
-        })
+      return outViewPromise.then(_ => {
+        this._currentView = this._newView
+        this._isTransitioningBetweenViews = false
+        return this._newView.in(data)
+      })
     }
 
-    go (url) {
+    go(url) {
       window.history.pushState({}, '', url)
       return this._onChanged()
     }
 
-    addRoute (route, view) {
+    addRoute(route, view) {
       if (this._routes.has(route)) {
         return console.warn(`Route already exists: ${route}`)
       }
@@ -54,39 +52,39 @@ export default (function () {
       this._routes.set(route, view)
     }
 
-    _addRoutes () {
+    _addRoutes() {
       let views = document.querySelectorAll('sc-view')
       // let views = Array.from(document.querySelectorAll('sc-view'))
-      views.forEach(view => {
-        if (!view.route) {
+      for (var i = 0; i < views.length; ++i) {
+        if (!views[i].route) {
           return
         }
 
-        this.addRoute(new RegExp(view.route, 'i'), view)
-      }, this)
+        this.addRoute(new RegExp(views[i].route, 'i'), views[i])
+      }
     }
 
-    _removeRoute (route) {
+    _removeRoute(route) {
       this._routes.delete(route)
     }
 
-    _clearRoutes () {
+    _clearRoutes() {
       this._routes.clear()
     }
 
-    createdCallback () {
+    createdCallback() {
       this._onChanged = this._onChanged.bind(this)
       this._routes = new Map()
     }
 
-    attachedCallback () {
+    attachedCallback() {
       window.addEventListener('popstate', this._onChanged)
       this._clearRoutes()
       this._addRoutes()
       this._onChanged()
     }
 
-    detachedCallback () {
+    detachedCallback() {
       window.removeEventListener('popstate', this._onChanged)
     }
   }

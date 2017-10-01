@@ -3,7 +3,7 @@ import { createClient } from 'contentful'
 module.exports = async (page) => {
   function structurePage (acc, cur) {
     const json = cur.fields.json
-    const data = {
+    acc[cur.fields.key] = {
       headline: cur.fields.headline,
       subline: cur.fields.subline || null,
       description: cur.fields.description || null,
@@ -14,10 +14,9 @@ module.exports = async (page) => {
 
     if (json && json.jobs) {
       const experience = cur.fields.json.jobs
-      data.jobs = Object.keys(experience).map((k) => experience[k])
+      acc[cur.fields.key].jobs = Object.keys(experience).map((k) => experience[k])
     }
 
-    acc[cur.fields.key] = data
     return acc
   }
 
@@ -30,8 +29,7 @@ module.exports = async (page) => {
       'content_type': 'pages',
       order: '-sys.createdAt'
     })
-    const pages = entries.then(entries => entries.items.reduce(structurePage, {}))
-    resolve(pages)
+    resolve(entries.then(entries => entries.items.reduce(structurePage)))
   })
 
   return page && structurePage({}, page) || await Promise.resolve(getPages)
