@@ -1,9 +1,9 @@
+import 'babel-polyfill'
+
 const compile = require('../../tasks/compile')
 const meta = require('./meta')
 const content = require('./content')
 const write = require('./write')
-
-import 'babel-polyfill'
 
 module.exports = async () => {
   await compile()

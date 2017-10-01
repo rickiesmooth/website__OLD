@@ -1,9 +1,9 @@
 import { createClient } from 'contentful'
 
-module.exports = async (page) => {
-  function structurePage (acc, cur) {
+module.exports = async page => {
+  function structurePage(acc, cur) {
     const json = cur.fields.json
-    acc[cur.fields.key] = {
+    const data = {
       headline: cur.fields.headline,
       subline: cur.fields.subline || null,
       description: cur.fields.description || null,
@@ -14,9 +14,10 @@ module.exports = async (page) => {
 
     if (json && json.jobs) {
       const experience = cur.fields.json.jobs
-      acc[cur.fields.key].jobs = Object.keys(experience).map((k) => experience[k])
+      data.jobs = Object.keys(experience).map(k => experience[k])
     }
 
+    acc[cur.fields.key] = data
     return acc
   }
 
@@ -26,11 +27,14 @@ module.exports = async (page) => {
       accessToken: process.env.CONTENTFUL_API_KEY
     })
     const entries = client.getEntries({
-      'content_type': 'pages',
+      content_type: 'pages',
       order: '-sys.createdAt'
     })
-    resolve(entries.then(entries => entries.items.reduce(structurePage)))
+    const pages = entries.then(entries =>
+      entries.items.reduce(structurePage, {})
+    )
+    resolve(pages)
   })
 
-  return page && structurePage({}, page) || await Promise.resolve(getPages)
+  return (page && structurePage({}, page)) || Promise.resolve(getPages)
 }
