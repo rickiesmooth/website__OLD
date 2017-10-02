@@ -31,26 +31,30 @@ export default (function() {
       for (var rule in classes) {
         const key = getStyleKey(styleTag, classes[rule])
         if (!alreadyInjected[key]) {
-          styleTag.sheet.insertRule(classes[rule].cssText)
+          if (styleTag.styleSheet) {
+            // $FlowFixMe: legacy Internet Explorer compatibility
+            styleTag.styleSheet.cssText += classes[rule].cssText
+          } else {
+            styleTag.appendChild(document.createTextNode(classes[rule].cssText))
+          }
           alreadyInjected[key] = true
         }
       }
     }
-
     _loadView(data) {
       this._view = new window.DocumentFragment()
-      const xhr = new window.XMLHttpRequest()
-      xhr.onload = evt => {
-        const newDoc = evt.target.response
-        const newView = newDoc.querySelector('sc-view')
-        const newStyles = newDoc.querySelector('style')
-        newView.childNodes.forEach(node => this._view.appendChild(node))
-        this.appendChild(this._view)
-        this._loadStyles(newStyles)
-      }
-      xhr.responseType = 'document'
-      xhr.open('GET', `${data[0]}?partial`)
-      xhr.send()
+      const self = this
+      global
+        .fetch(`${data[0]}?partial`)
+        .then(response => response.text())
+        .then(text => new global.DOMParser().parseFromString(text, 'text/html'))
+        .then(document => {
+          const newView = document.querySelector('sc-view')
+          const newStyles = document.querySelector('style')
+          newView.childNodes.forEach(node => self._view.appendChild(node))
+          self.appendChild(self._view)
+          self._loadStyles(newStyles)
+        })
     }
 
     in(data) {

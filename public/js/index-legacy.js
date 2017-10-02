@@ -7,4 +7,8 @@ if (window.NodeList && !window.NodeList.prototype.forEach) {
   }
 }
 
-module.exports = [require('es6-shim'), require('./index')]
+module.exports = [
+  require('es6-shim'),
+  require('whatwg-fetch'),
+  require('./index')
+]
