@@ -49,7 +49,6 @@ export default (function() {
         .then(response => response.text())
         .then(text => new global.DOMParser().parseFromString(text, 'text/html'))
         .then(document => {
-          console.log('loaded new document')
           const newView = document.querySelector('sc-view')
           const newStyles = document.querySelector('style')
           newView.childNodes.forEach(node => self._view.appendChild(node))
@@ -147,7 +146,7 @@ export default (function() {
           node.style.left = null
           node.style.transform = null
         }
-
+        console.log('✨href === newValue', href, newValue)
         node.style.borderBottom =
           href === newValue ? '1px solid rgba(0,0,0,5)' : null
       })
