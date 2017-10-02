@@ -9,7 +9,6 @@ export default (function() {
         evt.preventDefault()
         router.go(evt.target.href)
       }
-      console.log('✨links', links)
       links.forEach(link => {
         link.addEventListener('click', onClick)
       })

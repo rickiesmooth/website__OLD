@@ -42,13 +42,14 @@ export default (function() {
       }
     }
     _loadView(data) {
-      this._view = new window.DocumentFragment()
+      this._view = document.createDocumentFragment()
       const self = this
       global
         .fetch(`${data[0]}?partial`)
         .then(response => response.text())
         .then(text => new global.DOMParser().parseFromString(text, 'text/html'))
         .then(document => {
+          console.log('loaded new document')
           const newView = document.querySelector('sc-view')
           const newStyles = document.querySelector('style')
           newView.childNodes.forEach(node => self._view.appendChild(node))
